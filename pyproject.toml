@@ -1,0 +1,66 @@
+[build-system]
+requires = ["ksp-builder", "setuptools>=65.0.0", "wheel>=0.36.0"]
+build-backend = "ksp_builder"
+
+[project]
+name = "nfswebview"
+version = "1.0.0"
+description = "High-performance, hardware-accelerated GPU-to-GPU Android WebView rendering layer for the Kivy framework."
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "MIT" }
+authors = [
+    { name = "Kartavya Shukla", email = "novfensec@protonmail.com" }
+]
+keywords = [
+    "android", 
+    "webview", 
+    "gpu-rendering", 
+    "hardware-acceleration", 
+    "kivy", 
+    "pyjnius",
+    "android-16"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Android",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "pyjnius>=1.6.0",
+    "kivy>=2.3.0",
+]
+
+[project.urls]
+Repository = "https://github.com/Novfensec/nfswebview"
+Issues = "https://github.com/Novfensec/nfswebview/issues"
+
+[tool.pyjnius]
+java-paths = ["./java"]
+
+[tool.uv.sources]
+ksp-builder = { git = "https://github.com/kivy-school/ksp-builder" }
+
+[tool.kivy-school.android]
+gradle_dependencies = []
+
+permissions = [
+    "INTERNET",
+    "ACCESS_NETWORK_STATE",
+    "CAMERA",
+    "RECORD_AUDIO",
+    "MODIFY_AUDIO_SETTINGS",
+    "ACCESS_FINE_LOCATION",
+    "ACCESS_COARSE_LOCATION",
+    "READ_EXTERNAL_STORAGE",
+    "WRITE_EXTERNAL_STORAGE",
+    "READ_MEDIA_IMAGES",
+    "READ_MEDIA_VIDEO",
+    "READ_MEDIA_AUDIO",
+    "NEARBY_WIFI_DEVICES",
+    "WAKE_LOCK"
+]
