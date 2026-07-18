@@ -4,7 +4,7 @@
 
 This library delivers native 60 FPS scrolling, full support for hardware-accelerated WebRTC (video/audio streams), HTML5 Geolocation, advanced input handling (touch event mapping), and complete compatibility up to Android 16 (API 36).
 
-> [!INFO]
+> [!NOTE]
 > [NfsBrowser](https://github.com/novfensec/NfsBrowser) is a full fledged open source browser application build using NfsWebview.
 
 ## Architecture & Pipeline Overview
