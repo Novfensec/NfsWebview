@@ -4,7 +4,7 @@ build-backend = "ksp_builder"
 
 [project]
 name = "nfswebview"
-version = "1.0.0"
+version = "1.0.2"
 description = "High-performance, hardware-accelerated GPU-to-GPU Android WebView rendering layer for the Kivy framework."
 readme = "README.md"
 requires-python = ">=3.13"
