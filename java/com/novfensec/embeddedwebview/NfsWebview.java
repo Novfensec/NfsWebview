@@ -614,10 +614,9 @@ public class NfsWebview {
                     null);
         }
 
-        @SuppressLint("WebViewClientOnReceivedSslError")
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            handler.proceed();
+            handler.cancel();
         }
 
         @Override
