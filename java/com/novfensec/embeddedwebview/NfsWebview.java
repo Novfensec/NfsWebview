@@ -51,7 +51,6 @@ import android.webkit.URLUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Base64;
 import android.graphics.Bitmap;
 
 public class NfsWebview {
@@ -117,7 +116,17 @@ public class NfsWebview {
                 setContentView(webView, new FrameLayout.LayoutParams(width, height));
             }
         };
-        presentation.show();
+
+        activity.getWindow().getDecorView().post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    presentation.show();
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to show presentation: " + e.getMessage());
+                }
+            }
+        });
 
         keyboardProxy = new KeyboardProxyView(context);
         activity.runOnUiThread(new Runnable() {
@@ -704,7 +713,7 @@ public class NfsWebview {
                     @Override
                     public android.view.WindowInsets onApplyWindowInsets(View v, android.view.WindowInsets insets) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            return android.view.WindowInsets.CONSUMED;
+                            return WindowInsetsHelper.getConsumed();
                         } else {
                             return insets.consumeSystemWindowInsets();
                         }
@@ -947,6 +956,12 @@ public class NfsWebview {
             });
         }
 
+    }
+
+    private static class WindowInsetsHelper {
+    @android.annotation.TargetApi(android.os.Build.VERSION_CODES.R)
+    static android.view.WindowInsets getConsumed() {
+        return android.view.WindowInsets.CONSUMED;
     }
 
     public interface OnFrameReadyListener {
