@@ -958,9 +958,10 @@ public class NfsWebview {
     }
 
     private static class WindowInsetsHelper {
-    @android.annotation.TargetApi(android.os.Build.VERSION_CODES.R)
-    static android.view.WindowInsets getConsumed() {
-        return android.view.WindowInsets.CONSUMED;
+        @android.annotation.TargetApi(android.os.Build.VERSION_CODES.R)
+        static android.view.WindowInsets getConsumed() {
+            return android.view.WindowInsets.CONSUMED;
+        }
     }
 
     public interface OnFrameReadyListener {
