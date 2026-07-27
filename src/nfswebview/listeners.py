@@ -1,6 +1,7 @@
 from kivy.clock import Clock
 
 from jnius import autoclass, PythonJavaClass, java_method
+from android.runnable import run_on_ui_thread # type: ignore
 
 PythonActivity = autoclass("org.kivy.android.PythonActivity")
 GLES11Ext = autoclass("android.opengl.GLES11Ext")
