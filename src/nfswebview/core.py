@@ -37,6 +37,9 @@ class NfsWebviewWidget(Widget):
             colorfmt="rgba",
         )
         self.fbo = Fbo(size=(800, 800))
+
+        self.canvas.add(self.fbo)
+
         if platform == "android":
             self.fbo.shader.fs = OES_FRAGMENT_SHADER
 
@@ -102,9 +105,7 @@ class NfsWebviewWidget(Widget):
                 return
 
         if self.native_webview.updateTexImage():
-            self.oes_binder.ask_update()
-            self.fbo.draw()
-            self.widget_rect.texture = self.fbo.texture
+            self.fbo.ask_update()
             self.canvas.ask_update()
 
     def on_size(self, instance, value):

@@ -1,7 +1,6 @@
 from kivy.clock import Clock
 
 from jnius import autoclass, PythonJavaClass, java_method
-from android.runnable import run_on_ui_thread
 
 PythonActivity = autoclass("org.kivy.android.PythonActivity")
 GLES11Ext = autoclass("android.opengl.GLES11Ext")
@@ -17,11 +16,11 @@ class FrameReadyCallback(PythonJavaClass):
 
     def __init__(self, callback):
         super().__init__()
-        self.callback = callback
+        self._trigger = Clock.create_trigger(lambda dt: callback(), 0)
 
     @java_method("()V")
     def onFrameReady(self):
-        Clock.schedule_once(self.callback, 0)
+        self._trigger()
 
 
 class ProgressCallback(PythonJavaClass):
@@ -30,11 +29,15 @@ class ProgressCallback(PythonJavaClass):
 
     def __init__(self, callback):
         super().__init__()
-        self.callback = callback
+        self._trigger = Clock.create_trigger(
+            lambda dt, cb=callback: cb(self._current_progress), 0
+        )
+        self._current_progress = 0
 
     @java_method("(I)V")
     def onProgress(self, progress):
-        Clock.schedule_once(lambda dt: self.callback(progress), 0)
+        self._current_progress = progress
+        self._trigger()
 
 
 class DownloadProgressCallback(PythonJavaClass):
@@ -106,10 +109,9 @@ class ContextMenuCallback(PythonJavaClass):
     def onContextMenuRequested(self, hit_type, extra):
         Clock.schedule_once(lambda dt: self.callback(hit_type, extra), 0)
 
+
 class PageInfoCallback(PythonJavaClass):
-    __javainterfaces__ = [
-        "com/novfensec/embeddedwebview/NfsWebview$OnPageInfoListener"
-    ]
+    __javainterfaces__ = ["com/novfensec/embeddedwebview/NfsWebview$OnPageInfoListener"]
     __javacontext__ = "app"
 
     def __init__(self, url_callback, icon_callback):
@@ -124,6 +126,7 @@ class PageInfoCallback(PythonJavaClass):
     @java_method("(Ljava/lang/String;)V")
     def onPageIconChanged(self, icon_path):
         Clock.schedule_once(lambda dt: self.icon_callback(icon_path), 0)
+
 
 class NewTabCallback(PythonJavaClass):
     __javainterfaces__ = [
