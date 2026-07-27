@@ -105,6 +105,7 @@ class NfsWebviewWidget(Widget):
                 return
 
         if self.native_webview.updateTexImage():
+            self.oes_binder.ask_update()
             self.fbo.ask_update()
             self.canvas.ask_update()
 
@@ -118,6 +119,7 @@ class NfsWebviewWidget(Widget):
                 self.fbo_rect.size = (w, h)
             if hasattr(self, "widget_rect"):
                 self.widget_rect.size = value
+                self.widget_rect.texture = self.fbo.texture 
             if self.native_webview:
                 self.resize_native_view(w, h)
 
