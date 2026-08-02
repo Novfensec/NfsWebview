@@ -104,21 +104,29 @@ class NfsWebviewWidget(Widget):
         if self.native_webview.updateTexImage():
             self.oes_binder.ask_update()
             self.fbo.draw()
-            self.widget_rect.texture = self.fbo.texture
             self.canvas.ask_update()
 
     def on_size(self, instance, value):
         w, h = int(value[0]), int(value[1])
         if w == 0 or h == 0:
             return
+            
         if platform == "android":
             self.fbo.size = (w, h)
             if hasattr(self, "fbo_rect"):
                 self.fbo_rect.size = (w, h)
+
             if hasattr(self, "widget_rect"):
                 self.widget_rect.size = value
+
+            Clock.schedule_once(self._rebind_texture, 0)
+            
             if self.native_webview:
                 self.resize_native_view(w, h)
+
+    def _rebind_texture(self, dt):
+        if hasattr(self, "widget_rect") and self.fbo.texture is not None:
+            self.widget_rect.texture = self.fbo.texture
 
     def on_pos(self, instance, value):
         if hasattr(self, "widget_rect"):
