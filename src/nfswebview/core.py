@@ -1,12 +1,28 @@
-from kivy.uix.widget import Widget
-from kivy.graphics import Fbo, Callback, Rectangle, Color
+from kivy.clock import Clock
+from kivy.graphics import Callback, Color, Fbo, Rectangle
 from kivy.graphics.texture import Texture
+from kivy.uix.widget import Widget
 from kivy.utils import platform
 
 from .shaders import OES_FRAGMENT_SHADER
 
 if platform == "android":
-    from .listeners import *
+    from android.runnable import run_on_ui_thread  # type: ignore
+
+    from .listeners import (
+        ContextMenuCallback,
+        DownloadProgressCallback,
+        DownloadRequestCallback,
+        FrameReadyCallback,
+        FullScreenCallback,
+        GLES11Ext,
+        MotionEvent,
+        NativeWebView,
+        NewTabCallback,
+        PageInfoCallback,
+        ProgressCallback,
+        PythonActivity,
+    )
 else:
     run_on_ui_thread = lambda func: func
     GLES11Ext = type("MockGLES11Ext", (), {"GL_TEXTURE_EXTERNAL_OES": 36197})()
@@ -39,6 +55,8 @@ class NfsWebviewWidget(Widget):
         self.fbo = Fbo(size=(800, 800))
         if platform == "android":
             self.fbo.shader.fs = OES_FRAGMENT_SHADER
+
+        self.canvas.add(self.fbo)
 
         with self.fbo:
             Color(1, 1, 1, 1)
@@ -103,14 +121,14 @@ class NfsWebviewWidget(Widget):
 
         if self.native_webview.updateTexImage():
             self.oes_binder.ask_update()
-            self.fbo.draw()
+            self.fbo.ask_update()
             self.canvas.ask_update()
 
     def on_size(self, instance, value):
         w, h = int(value[0]), int(value[1])
         if w == 0 or h == 0:
             return
-            
+
         if platform == "android":
             self.fbo.size = (w, h)
             if hasattr(self, "fbo_rect"):
@@ -120,7 +138,7 @@ class NfsWebviewWidget(Widget):
                 self.widget_rect.size = value
 
             Clock.schedule_once(self._rebind_texture, 0)
-            
+
             if self.native_webview:
                 self.resize_native_view(w, h)
 

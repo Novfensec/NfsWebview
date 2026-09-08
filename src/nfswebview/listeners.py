@@ -1,7 +1,5 @@
+from jnius import PythonJavaClass, autoclass, java_method
 from kivy.clock import Clock
-
-from jnius import autoclass, PythonJavaClass, java_method
-from android.runnable import run_on_ui_thread
 
 PythonActivity = autoclass("org.kivy.android.PythonActivity")
 GLES11Ext = autoclass("android.opengl.GLES11Ext")
@@ -106,10 +104,9 @@ class ContextMenuCallback(PythonJavaClass):
     def onContextMenuRequested(self, hit_type, extra):
         Clock.schedule_once(lambda dt: self.callback(hit_type, extra), 0)
 
+
 class PageInfoCallback(PythonJavaClass):
-    __javainterfaces__ = [
-        "com/novfensec/embeddedwebview/NfsWebview$OnPageInfoListener"
-    ]
+    __javainterfaces__ = ["com/novfensec/embeddedwebview/NfsWebview$OnPageInfoListener"]
     __javacontext__ = "app"
 
     def __init__(self, url_callback, icon_callback):
@@ -124,6 +121,7 @@ class PageInfoCallback(PythonJavaClass):
     @java_method("(Ljava/lang/String;)V")
     def onPageIconChanged(self, icon_path):
         Clock.schedule_once(lambda dt: self.icon_callback(icon_path), 0)
+
 
 class NewTabCallback(PythonJavaClass):
     __javainterfaces__ = [
