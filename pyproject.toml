@@ -43,7 +43,7 @@ Issues = "https://github.com/Novfensec/nfswebview/issues"
 java-paths = ["./java"]
 
 [tool.uv.sources]
-ksp-builder = { git = "https://github.com/kivy-school/ksp-builder" }
+ksp-builder = { git = "https://github.com/kivy-school/ksp-builder", rev="dfix" }
 
 [tool.kivy-school.android]
 gradle_dependencies = []
